@@ -1,3 +1,68 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+final HYDART_PORT = 9999;
+final HYDART_HOST = "localhost";
+
+class HydartServer extends Isolate {
+	num _port;
+	String _host;
+	
+	HydartServer() : super.heavy();
+	
+	main() {
+		print("invoked");
+		print ("Starting: ${_host}:${_port}");
+		
+		this.port.receive(
+        	void _(var message, SendPort replyTo) {
+        		print ("receiver ${message}");
+        		replyTo.send("Pong");
+	        }
+	    );
+	}
+}
+
+class HydartStarter {
+	SendPort _sendPort;
+	ReceivePort _receivePort;
+	
+	HydartStarter.start() : 
+		_receivePort = new ReceivePort(),
+		_sendPort = null {
+			this._receivePort.receive(
+				void _(var message, SendPort replyTo) {
+	        		print ("receiver ${message}");
+		        }
+			);
+			
+			HydartServer hydart = new HydartServer();
+			hydart.spawn().then((SendPort port) {
+			_sendPort = port;
+			_sendPort.send('Ping', _receivePort);
+		});		
+	}
+}
+
+
 main() {
-	print ("Hello Hydart");	
+	print ("Hello, this is Hydart");	
+	new HydartStarter.start();
+	print ("Hydart main ended");		
 }
