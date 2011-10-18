@@ -1,0 +1,9 @@
+HYDART
+
+In Greek mythology, the Lernaean Hydra (Greek:  Λερναία Ὕδρα (help·info)) was an ancient nameless serpent-like chthonic water beast, with reptilian traits, (as its name evinces) that possessed many heads. (http://en.wikipedia.org/wiki/Lernaean_Hydra).
+
+Dart is a scripting language intiated by Google: http://www.dartlang.org)
+
+HYDART is an experiment in Dart; it does respond to http request and forks new isolates for each request. You could say, HYDART is having many heads too. You could say the HYDART is multiheaded beast, which answers http requests.
+
+HYDART uses the Apache License 2.0 as every cool Open Source project.
