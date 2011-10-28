@@ -27,12 +27,13 @@ class HydartServer extends Isolate {
 	HydartServer() : super.heavy();
 	
 	main() {
-		print("invoked");
+		print("invoked hydart server isolate");
 		print ("Starting: ${_host}:${_port}");
 		
 		this.port.receive(
         	void _(var message, SendPort replyTo) {
-        		print ("receiver ${message}");
+        		print ("Isolate receives: ${message}");
+				print ("Sending pong message");
         		replyTo.send("Pong");
 	        }
 	    );
@@ -48,14 +49,15 @@ class HydartStarter {
 		_sendPort = null {
 			this._receivePort.receive(
 				void _(var message, SendPort replyTo) {
-	        		print ("receiver ${message}");
+	        		print ("HydartStart receives from Isolate: ${message}");
+	        		// _receivePort.close();
 		        }
 			);
 			
 			HydartServer hydart = new HydartServer();
 			hydart.spawn().then((SendPort port) {
-			_sendPort = port;
-			_sendPort.send('Ping', _receivePort);
+				_sendPort = port;
+				_sendPort.send('Ping', _receivePort.toSendPort());
 		});		
 	}
 }
