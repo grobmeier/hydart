@@ -49,7 +49,7 @@ class HydartStarter {
 			this._receivePort.receive(
 				void _(var message, SendPort replyTo) {
 	        		print ("HydartStart receives from Isolate: ${message}");
-	        		// _receivePort.close();
+	        		 _receivePort.close();
 		        }
 			);
 			
